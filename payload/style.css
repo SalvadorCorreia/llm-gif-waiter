@@ -1,16 +1,19 @@
-/* payload/style.css */
-
 .llm-nyan-widget {
   position: fixed;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 9999;
-  pointer-events: none;
+  cursor: grab;
+}
+
+.llm-nyan-widget:active {
+  cursor: grabbing;
 }
 
 .llm-nyan-widget img {
   width: 300px;
   border-radius: 8px;
   box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+  pointer-events: none;
 }
