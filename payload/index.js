@@ -1,5 +1,6 @@
 window.LLMPayload = {
   container: null,
+  configKey: "llm-nyan-config",
 
   mount: function (targetElement, theme) {
     this.container = targetElement;
@@ -11,7 +12,18 @@ window.LLMPayload = {
     img.src = "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
     img.alt = "Nyan Cat";
     img.draggable = false;
-    img.style.width = "300px";
+
+    const savedConfig = JSON.parse(
+      localStorage.getItem(this.configKey) || "{}",
+    );
+
+    img.style.width = savedConfig.width || "300px";
+
+    if (savedConfig.left && savedConfig.top) {
+      wrapper.style.left = savedConfig.left;
+      wrapper.style.top = savedConfig.top;
+      wrapper.style.transform = "none";
+    }
 
     wrapper.appendChild(img);
     this.container.appendChild(wrapper);
@@ -20,8 +32,18 @@ window.LLMPayload = {
     this.addResizeHandles(wrapper, img);
   },
 
+  saveConfig: function (wrapper, img) {
+    const config = {
+      width: img.style.width,
+      left: wrapper.style.left,
+      top: wrapper.style.top,
+    };
+    localStorage.setItem(this.configKey, JSON.stringify(config));
+  },
+
   addResizeHandles: function (wrapper, img) {
     const positions = ["nw", "ne", "sw", "se"];
+    const self = this;
 
     positions.forEach((pos) => {
       const handle = document.createElement("div");
@@ -73,6 +95,7 @@ window.LLMPayload = {
         function stopResize() {
           document.removeEventListener("mousemove", resize);
           document.removeEventListener("mouseup", stopResize);
+          self.saveConfig(wrapper, img);
         }
 
         document.addEventListener("mousemove", resize);
@@ -82,6 +105,7 @@ window.LLMPayload = {
   },
 
   makeDraggable: function (element) {
+    const self = this;
     element.onmousedown = function (event) {
       event.preventDefault();
 
@@ -107,6 +131,7 @@ window.LLMPayload = {
       document.onmouseup = function () {
         document.removeEventListener("mousemove", onMouseMove);
         document.onmouseup = null;
+        self.saveConfig(element, element.querySelector("img"));
       };
     };
   },
