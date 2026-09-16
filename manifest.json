@@ -8,6 +8,12 @@
     "48": "icons/base_icon.png",
     "128": "icons/base_icon.png"
   },
+  "permissions": ["storage"],
+  "background": {
+    "service_worker": "core/src/analytics-worker.js",
+    "scripts": ["core/src/analytics-worker.js"],
+    "type": "module"
+  },
   "content_scripts": [
     {
       "matches": [
@@ -27,6 +33,7 @@
       "css": ["payload/style.css"],
       "js": [
         "core/src/registry.js",
+        "core/src/settings.js",
         "core/src/providers/chatgpt.js",
         "core/src/providers/claude.js",
         "core/src/providers/deepseek.js",
