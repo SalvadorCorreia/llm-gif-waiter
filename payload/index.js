@@ -1,35 +1,47 @@
 window.LLMPayload = {
   container: null,
   configKey: "llm-nyan-config",
+  wrapper: null,
+  boundResize: null,
+  boundStopResize: null,
+  boundMouseMove: null,
+  boundMouseUp: null,
 
   mount: function (targetElement, theme) {
     this.container = targetElement;
+    const extAPI = typeof browser !== "undefined" ? browser : chrome;
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "llm-nyan-widget";
+    extAPI.storage.local.get({ customGifUrl: "" }, (data) => {
+      if (!this.container) return; // Prevent async race conditions
 
-    const img = document.createElement("img");
-    img.src = "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
-    img.alt = "Nyan Cat";
-    img.draggable = false;
+      this.wrapper = document.createElement("div");
+      this.wrapper.className = "llm-nyan-widget";
 
-    const savedConfig = JSON.parse(
-      localStorage.getItem(this.configKey) || "{}",
-    );
+      const img = document.createElement("img");
+      const defaultUrl =
+        "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
+      img.src = data.customGifUrl || defaultUrl;
+      img.alt = "Loading GIF";
+      img.draggable = false;
 
-    img.style.width = savedConfig.width || "300px";
+      const savedConfig = JSON.parse(
+        localStorage.getItem(this.configKey) || "{}",
+      );
 
-    if (savedConfig.left && savedConfig.top) {
-      wrapper.style.left = savedConfig.left;
-      wrapper.style.top = savedConfig.top;
-      wrapper.style.transform = "none";
-    }
+      img.style.width = savedConfig.width || "300px";
 
-    wrapper.appendChild(img);
-    this.container.appendChild(wrapper);
+      if (savedConfig.left && savedConfig.top) {
+        this.wrapper.style.left = savedConfig.left;
+        this.wrapper.style.top = savedConfig.top;
+        this.wrapper.style.transform = "none";
+      }
 
-    this.makeDraggable(wrapper);
-    this.addResizeHandles(wrapper, img);
+      this.wrapper.appendChild(img);
+      this.container.appendChild(this.wrapper);
+
+      this.makeDraggable(this.wrapper);
+      this.addResizeHandles(this.wrapper, img);
+    });
   },
 
   saveConfig: function (wrapper, img) {
@@ -67,7 +79,7 @@ window.LLMPayload = {
         const startLeft = rect.left;
         const startTop = rect.top;
 
-        function resize(event) {
+        self.boundResize = function (event) {
           let deltaX = event.clientX - startX;
           let newWidth;
 
@@ -78,10 +90,8 @@ window.LLMPayload = {
           }
 
           newWidth = Math.max(100, newWidth);
-
           const actualDeltaX = newWidth - startWidth;
           const actualDeltaY = actualDeltaX * aspectRatio;
-
           img.style.width = newWidth + "px";
 
           if (pos.includes("w")) {
@@ -90,16 +100,16 @@ window.LLMPayload = {
           if (pos.includes("n")) {
             wrapper.style.top = startTop - actualDeltaY + "px";
           }
-        }
+        };
 
-        function stopResize() {
-          document.removeEventListener("mousemove", resize);
-          document.removeEventListener("mouseup", stopResize);
+        self.boundStopResize = function () {
+          document.removeEventListener("mousemove", self.boundResize);
+          document.removeEventListener("mouseup", self.boundStopResize);
           self.saveConfig(wrapper, img);
-        }
+        };
 
-        document.addEventListener("mousemove", resize);
-        document.addEventListener("mouseup", stopResize);
+        document.addEventListener("mousemove", self.boundResize);
+        document.addEventListener("mouseup", self.boundStopResize);
       };
     });
   },
@@ -107,6 +117,7 @@ window.LLMPayload = {
   makeDraggable: function (element) {
     const self = this;
     element.onmousedown = function (event) {
+      if (event.target.classList.contains("resize-handle")) return;
       event.preventDefault();
 
       const rect = element.getBoundingClientRect();
@@ -117,26 +128,34 @@ window.LLMPayload = {
       element.style.left = rect.left + "px";
       element.style.top = rect.top + "px";
 
-      function moveAt(clientX, clientY) {
-        element.style.left = clientX - shiftX + "px";
-        element.style.top = clientY - shiftY + "px";
-      }
+      self.boundMouseMove = function (e) {
+        element.style.left = e.clientX - shiftX + "px";
+        element.style.top = e.clientY - shiftY + "px";
+      };
 
-      function onMouseMove(e) {
-        moveAt(e.clientX, e.clientY);
-      }
-
-      document.addEventListener("mousemove", onMouseMove);
-
-      document.onmouseup = function () {
-        document.removeEventListener("mousemove", onMouseMove);
-        document.onmouseup = null;
+      self.boundMouseUp = function () {
+        document.removeEventListener("mousemove", self.boundMouseMove);
+        document.removeEventListener("mouseup", self.boundMouseUp);
         self.saveConfig(element, element.querySelector("img"));
       };
+
+      document.addEventListener("mousemove", self.boundMouseMove);
+      document.addEventListener("mouseup", self.boundMouseUp);
     };
   },
 
   unmount: function () {
+    // Remove lingering global event listeners
+    if (this.boundResize)
+      document.removeEventListener("mousemove", this.boundResize);
+    if (this.boundStopResize)
+      document.removeEventListener("mouseup", this.boundStopResize);
+    if (this.boundMouseMove)
+      document.removeEventListener("mousemove", this.boundMouseMove);
+    if (this.boundMouseUp)
+      document.removeEventListener("mouseup", this.boundMouseUp);
+
     this.container = null;
+    this.wrapper = null;
   },
 };

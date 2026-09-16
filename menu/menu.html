@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="menu.css">
+</head>
+<body>
+  <div class="header">
+    <h2>GIF Waiter Settings</h2>
+  </div>
+  
+  <div class="analytics-card">
+    <div>
+      <span class="label">Time Saved Watching GIFs:</span><br>
+      <span class="value" id="time-display">0m 0s</span>
+    </div>
+    <button id="reset-time-btn" class="reset-btn">Reset</button>
+  </div>
+
+  <div class="settings-group">
+    <label class="toggle-row">
+      <span>Enable Extension</span>
+      <input type="checkbox" id="global-toggle">
+    </label>
+  </div>
+
+  <div class="settings-group">
+    <h3>Providers</h3>
+    <div id="provider-list"></div>
+  </div>
+
+  <div class="settings-group custom-settings">
+    <h3>Custom GIF URL</h3>
+    <input type="text" id="custom-gif-url" placeholder="https://media.giphy.com/..." class="text-input">
+    <p class="hint">Leave blank to use the default Nyan Cat.</p>
+  </div>
+
+  <script src="../core/src/registry.js"></script>
+  <script src="menu.js"></script>
+</body>
+</html>

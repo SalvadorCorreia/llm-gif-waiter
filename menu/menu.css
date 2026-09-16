@@ -1,0 +1,66 @@
+body {
+  width: 300px;
+  font-family: sans-serif;
+  margin: 0;
+  padding: 16px;
+  color: #333;
+}
+.header h2 {
+  margin: 0 0 16px 0;
+  font-size: 18px;
+}
+.analytics-card {
+  background: #f5f5f5;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.analytics-card .value {
+  font-weight: bold;
+  color: #0066cc;
+}
+.reset-btn {
+  background: #ff4d4d;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-size: 12px;
+}
+.reset-btn:hover {
+  background: #cc0000;
+}
+.settings-group {
+  margin-bottom: 16px;
+  border-top: 1px solid #eee;
+  padding-top: 12px;
+}
+.settings-group h3 {
+  margin: 0 0 12px 0;
+  font-size: 14px;
+  color: #666;
+}
+.toggle-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+.text-input {
+  width: 100%;
+  padding: 6px;
+  box-sizing: border-box;
+  margin-bottom: 4px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+.hint {
+  font-size: 12px;
+  color: #888;
+  margin: 0;
+}
