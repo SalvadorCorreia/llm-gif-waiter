@@ -6,6 +6,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const providerList = document.getElementById("provider-list");
   const resetBtn = document.getElementById("reset-time-btn");
   const gifUrlInput = document.getElementById("custom-gif-url");
+  const providerLayoutToggle = document.getElementById(
+    "provider-layout-toggle",
+  );
 
   extAPI.storage.local.get(
     {
@@ -13,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
       disabledProviders: [],
       totalWaitTimeMs: 0,
       customGifUrl: "",
+      useProviderLayouts: false,
     },
     (data) => {
       const totalSeconds = Math.floor(data.totalWaitTimeMs / 1000);
@@ -22,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       globalToggle.checked = data.globalEnabled;
       gifUrlInput.value = data.customGifUrl;
+      providerLayoutToggle.checked = data.useProviderLayouts;
 
       const manifest = extAPI.runtime.getManifest();
       const scripts = manifest.content_scripts[0].js;
@@ -85,6 +90,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   globalToggle.addEventListener("change", (e) => {
     extAPI.storage.local.set({ globalEnabled: e.target.checked });
+  });
+
+  providerLayoutToggle.addEventListener("change", (e) => {
+    extAPI.storage.local.set({ useProviderLayouts: e.target.checked });
   });
 
   resetBtn.addEventListener("click", () => {

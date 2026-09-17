@@ -1,6 +1,5 @@
 window.LLMPayload = {
   container: null,
-  configKey: "llm-nyan-config",
   wrapper: null,
   boundResize: null,
   boundStopResize: null,
@@ -11,46 +10,77 @@ window.LLMPayload = {
     this.container = targetElement;
     const extAPI = typeof browser !== "undefined" ? browser : chrome;
 
-    extAPI.storage.local.get({ customGifUrl: "" }, (data) => {
-      if (!this.container) return; // Prevent async race conditions
+    extAPI.storage.local.get(
+      {
+        customGifUrl: "",
+        useProviderLayouts: false,
+        globalLayout: {},
+        providerLayouts: {},
+      },
+      (data) => {
+        if (!this.container) return;
 
-      this.wrapper = document.createElement("div");
-      this.wrapper.className = "llm-nyan-widget";
+        this.wrapper = document.createElement("div");
+        this.wrapper.className = "llm-nyan-widget";
 
-      const img = document.createElement("img");
-      const defaultUrl =
-        "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
-      img.src = data.customGifUrl || defaultUrl;
-      img.alt = "Loading GIF";
-      img.draggable = false;
+        const img = document.createElement("img");
+        const defaultUrl =
+          "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
+        img.src = data.customGifUrl || defaultUrl;
+        img.alt = "Loading GIF";
+        img.draggable = false;
 
-      const savedConfig = JSON.parse(
-        localStorage.getItem(this.configKey) || "{}",
-      );
+        const providerName = window.LLMRegistry
+          ? window.LLMRegistry.getActiveProvider().name
+          : "Unknown";
+        let savedConfig = {};
 
-      img.style.width = savedConfig.width || "300px";
+        if (data.useProviderLayouts) {
+          savedConfig = data.providerLayouts[providerName] || {};
+        } else {
+          savedConfig = data.globalLayout || {};
+        }
 
-      if (savedConfig.left && savedConfig.top) {
-        this.wrapper.style.left = savedConfig.left;
-        this.wrapper.style.top = savedConfig.top;
-        this.wrapper.style.transform = "none";
-      }
+        img.style.width = savedConfig.width || "300px";
 
-      this.wrapper.appendChild(img);
-      this.container.appendChild(this.wrapper);
+        if (savedConfig.left && savedConfig.top) {
+          this.wrapper.style.left = savedConfig.left;
+          this.wrapper.style.top = savedConfig.top;
+          this.wrapper.style.transform = "none";
+        }
 
-      this.makeDraggable(this.wrapper);
-      this.addResizeHandles(this.wrapper, img);
-    });
+        this.wrapper.appendChild(img);
+        this.container.appendChild(this.wrapper);
+
+        this.makeDraggable(this.wrapper);
+        this.addResizeHandles(this.wrapper, img);
+      },
+    );
   },
 
   saveConfig: function (wrapper, img) {
+    const extAPI = typeof browser !== "undefined" ? browser : chrome;
     const config = {
       width: img.style.width,
       left: wrapper.style.left,
       top: wrapper.style.top,
     };
-    localStorage.setItem(this.configKey, JSON.stringify(config));
+
+    extAPI.storage.local.get(
+      { useProviderLayouts: false, providerLayouts: {} },
+      (data) => {
+        if (data.useProviderLayouts) {
+          const providerName = window.LLMRegistry
+            ? window.LLMRegistry.getActiveProvider().name
+            : "Unknown";
+          const newProviderLayouts = data.providerLayouts;
+          newProviderLayouts[providerName] = config;
+          extAPI.storage.local.set({ providerLayouts: newProviderLayouts });
+        } else {
+          extAPI.storage.local.set({ globalLayout: config });
+        }
+      },
+    );
   },
 
   addResizeHandles: function (wrapper, img) {
@@ -145,7 +175,6 @@ window.LLMPayload = {
   },
 
   unmount: function () {
-    // Remove lingering global event listeners
     if (this.boundResize)
       document.removeEventListener("mousemove", this.boundResize);
     if (this.boundStopResize)
