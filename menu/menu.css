@@ -5,10 +5,12 @@ body {
   padding: 16px;
   color: #333;
 }
+
 .header h2 {
   margin: 0 0 16px 0;
   font-size: 18px;
 }
+
 .analytics-card {
   background: #f5f5f5;
   padding: 12px;
@@ -18,10 +20,12 @@ body {
   justify-content: space-between;
   align-items: center;
 }
+
 .analytics-card .value {
   font-weight: bold;
   color: #0066cc;
 }
+
 .reset-btn {
   background: #ff4d4d;
   color: white;
@@ -31,19 +35,36 @@ body {
   cursor: pointer;
   font-size: 12px;
 }
+
 .reset-btn:hover {
   background: #cc0000;
 }
+
 .settings-group {
   margin-bottom: 16px;
   border-top: 1px solid #eee;
   padding-top: 12px;
 }
+
 .settings-group h3 {
   margin: 0 0 12px 0;
   font-size: 14px;
   color: #666;
 }
+
+details summary {
+  font-size: 14px;
+  font-weight: bold;
+  color: #666;
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+}
+
+details[open] summary {
+  margin-bottom: 12px;
+}
+
 .toggle-row {
   display: flex;
   justify-content: space-between;
@@ -51,6 +72,7 @@ body {
   margin-bottom: 8px;
   cursor: pointer;
 }
+
 .text-input {
   width: 100%;
   padding: 6px;
@@ -59,6 +81,7 @@ body {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
+
 .hint {
   font-size: 12px;
   color: #888;
