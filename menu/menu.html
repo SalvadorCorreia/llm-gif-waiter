@@ -31,12 +31,6 @@
     </details>
   </div>
 
-  <div class="settings-group custom-settings">
-    <h3>Custom GIF URL</h3>
-    <input type="text" id="custom-gif-url" placeholder="https://media.giphy.com/..." class="text-input">
-    <p class="hint">Leave blank to use the default Nyan Cat.</p>
-  </div>
-
   <div class="settings-group">
     <h3>Layout</h3>
     <label class="toggle-row">
@@ -44,6 +38,10 @@
       <input type="checkbox" id="provider-layout-toggle">
     </label>
     <p class="hint">When disabled, size and position are shared across all AI platforms.</p>
+  </div>
+
+  <div class="settings-group">
+    <button id="open-gallery-btn" style="width: 100%; padding: 8px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc;">Open GIF Gallery</button>
   </div>
 
   <script src="../core/src/registry.js"></script>

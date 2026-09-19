@@ -12,7 +12,7 @@ window.LLMPayload = {
 
     extAPI.storage.local.get(
       {
-        customGifUrl: "",
+        selectedGif: "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif",
         useProviderLayouts: false,
         globalLayout: {},
         providerLayouts: {},
@@ -24,9 +24,7 @@ window.LLMPayload = {
         this.wrapper.className = "llm-nyan-widget";
 
         const img = document.createElement("img");
-        const defaultUrl =
-          "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif";
-        img.src = data.customGifUrl || defaultUrl;
+        img.src = data.selectedGif;
         img.alt = "Loading GIF";
         img.draggable = false;
 

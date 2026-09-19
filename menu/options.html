@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="options.css">
+  <title>GIF Gallery</title>
+</head>
+<body>
+  <div class="container">
+    <h1>GIF Gallery</h1>
+    <p>Select a GIF to display while waiting for generation.</p>
+    
+    <div class="grid" id="gif-grid">
+      <div class="grid-item custom-slot" id="custom-slot">
+        <div class="placeholder" id="custom-placeholder">
+          <span class="plus-sign">+</span>
+        </div>
+        <div class="custom-input-container" id="custom-input-container" style="display: none;">
+          <input type="text" id="custom-gif-url" placeholder="Paste direct GIF URL...">
+          <button id="save-custom-btn">Save Link</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="options.js"></script>
+</body>
+</html>

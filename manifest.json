@@ -13,6 +13,10 @@
     "default_popup": "menu/menu.html",
     "default_title": "GIF Waiter Settings"
   },
+  "options_ui": {
+    "page": "menu/options.html",
+    "open_in_tab": true
+  },
   "background": {
     "service_worker": "core/src/analytics-worker.js",
     "scripts": ["core/src/analytics-worker.js"]

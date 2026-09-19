@@ -5,17 +5,16 @@ document.addEventListener("DOMContentLoaded", () => {
   const globalToggle = document.getElementById("global-toggle");
   const providerList = document.getElementById("provider-list");
   const resetBtn = document.getElementById("reset-time-btn");
-  const gifUrlInput = document.getElementById("custom-gif-url");
   const providerLayoutToggle = document.getElementById(
     "provider-layout-toggle",
   );
+  const openGalleryBtn = document.getElementById("open-gallery-btn");
 
   extAPI.storage.local.get(
     {
       globalEnabled: true,
       disabledProviders: [],
       totalWaitTimeMs: 0,
-      customGifUrl: "",
       useProviderLayouts: false,
     },
     (data) => {
@@ -25,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
       timeDisplay.textContent = `${minutes}m ${seconds}s`;
 
       globalToggle.checked = data.globalEnabled;
-      gifUrlInput.value = data.customGifUrl;
       providerLayoutToggle.checked = data.useProviderLayouts;
 
       const manifest = extAPI.runtime.getManifest();
@@ -102,7 +100,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  gifUrlInput.addEventListener("input", (e) => {
-    extAPI.storage.local.set({ customGifUrl: e.target.value.trim() });
+  openGalleryBtn.addEventListener("click", () => {
+    extAPI.runtime.openOptionsPage();
   });
 });

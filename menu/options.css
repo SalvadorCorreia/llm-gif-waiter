@@ -1,0 +1,121 @@
+body {
+  font-family: sans-serif;
+  background-color: #f0f2f5;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  padding: 40px 20px;
+}
+
+.container {
+  max-width: 900px;
+  width: 100%;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+h1 {
+  margin-top: 0;
+  color: #333;
+}
+
+p {
+  color: #666;
+  margin-bottom: 24px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+
+.grid-item {
+  aspect-ratio: 1;
+  border: 3px solid transparent;
+  border-radius: 8px;
+  overflow: hidden;
+  cursor: pointer;
+  background-color: #f9f9f9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: border-color 0.2s, transform 0.1s;
+}
+
+.grid-item:hover {
+  border-color: #ddd;
+  transform: scale(1.02);
+}
+
+.grid-item.selected {
+  border-color: #0066cc;
+  box-shadow: 0 0 12px rgba(0, 102, 204, 0.3);
+}
+
+.grid-item img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Custom Slot Specific Styling */
+.custom-slot {
+  border: 3px dashed #bbb;
+  flex-direction: column;
+}
+
+.custom-slot:hover {
+  border-color: #888;
+}
+
+.custom-slot.selected {
+  border: 3px solid #0066cc;
+}
+
+.placeholder {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.plus-sign {
+  font-size: 64px;
+  color: #bbb;
+  font-weight: 300;
+}
+
+.custom-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-input-container input {
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.custom-input-container button {
+  padding: 10px;
+  background-color: #0066cc;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.custom-input-container button:hover {
+  background-color: #0052a3;
+}
