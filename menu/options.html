@@ -3,26 +3,49 @@
 <head>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="options.css">
-  <title>GIF Gallery</title>
+  <title>GIF Waiter Settings</title>
 </head>
 <body>
   <div class="container">
-    <h1>GIF Gallery</h1>
-    <p>Select a GIF to display while waiting for generation.</p>
-    
-    <div class="grid" id="gif-grid">
-      <div class="grid-item custom-slot" id="custom-slot">
-        <div class="placeholder" id="custom-placeholder">
-          <span class="plus-sign">+</span>
-        </div>
-        <div class="custom-input-container" id="custom-input-container" style="display: none;">
-          <input type="text" id="custom-gif-url" placeholder="Paste direct GIF URL...">
-          <button id="save-custom-btn">Save Link</button>
+    <h1>GIF Waiter Settings</h1>
+
+    <div class="settings-section">
+      <h2>GIF Gallery</h2>
+      <p class="hint">Select a GIF to display while waiting for generation.</p>
+      
+      <div class="grid" id="gif-grid">
+        <!-- Default GIFs injected here via JS -->
+        
+        <!-- Custom Input Slot -->
+        <div class="grid-item custom-slot" id="custom-slot">
+          <div class="placeholder" id="custom-placeholder">
+            <span class="plus-sign">+</span>
+          </div>
+          <div class="custom-input-container" id="custom-input-container" style="display: none;">
+            <input type="text" id="custom-gif-url" placeholder="Paste direct GIF URL...">
+            <button id="save-custom-btn">Save Link</button>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="settings-section config-section">
+      <h2>Layout Preferences</h2>
+      <label class="toggle-row">
+        <span>Provider-Specific Layouts</span>
+        <input type="checkbox" id="provider-layout-toggle">
+      </label>
+      <p class="hint">When disabled, size and position are shared across all AI platforms.</p>
+    </div>
+
+    <div class="settings-section config-section">
+      <h2>Active Providers</h2>
+      <p class="hint">Disable the extension on specific AI platforms.</p>
+      <div id="provider-list" class="provider-list"></div>
+    </div>
   </div>
 
+  <script src="../core/src/registry.js"></script>
   <script src="options.js"></script>
 </body>
 </html>

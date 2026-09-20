@@ -6,7 +6,7 @@
 </head>
 <body>
   <div class="header">
-    <h2>GIF Waiter Settings</h2>
+    <h2>GIF Waiter</h2>
   </div>
   
   <div class="analytics-card">
@@ -25,26 +25,9 @@
   </div>
 
   <div class="settings-group">
-    <details>
-      <summary>Providers</summary>
-      <div id="provider-list"></div>
-    </details>
+    <button id="open-options-btn" style="width: 100%; padding: 10px; cursor: pointer; border-radius: 6px; border: none; background-color: #0066cc; color: white; font-weight: bold; font-size: 14px;">Advanced Settings & Gallery</button>
   </div>
 
-  <div class="settings-group">
-    <h3>Layout</h3>
-    <label class="toggle-row">
-      <span>Provider-Specific Layouts</span>
-      <input type="checkbox" id="provider-layout-toggle">
-    </label>
-    <p class="hint">When disabled, size and position are shared across all AI platforms.</p>
-  </div>
-
-  <div class="settings-group">
-    <button id="open-gallery-btn" style="width: 100%; padding: 8px; cursor: pointer; border-radius: 4px; border: 1px solid #ccc;">Open GIF Gallery</button>
-  </div>
-
-  <script src="../core/src/registry.js"></script>
   <script src="menu.js"></script>
 </body>
 </html>
