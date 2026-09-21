@@ -6,6 +6,12 @@ body {
   justify-content: center;
   padding: 40px 20px;
   color: #333;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+body.dark-mode {
+  background-color: #121212;
+  color: #ececec;
 }
 
 .container {
@@ -15,12 +21,22 @@ body {
   padding: 30px;
   border-radius: 12px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: background-color 0.2s;
+}
+
+body.dark-mode .container {
+  background: #1e1e1e;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
 }
 
 h1 {
   margin-top: 0;
   color: #333;
   margin-bottom: 30px;
+}
+
+body.dark-mode h1, body.dark-mode h2 {
+  color: #ececec;
 }
 
 h2 {
@@ -36,10 +52,18 @@ h2 {
   margin-bottom: 20px;
 }
 
+body.dark-mode .hint {
+  color: #aaa;
+}
+
 .settings-section {
   margin-bottom: 40px;
   padding-bottom: 30px;
   border-bottom: 1px solid #eee;
+}
+
+body.dark-mode .settings-section {
+  border-bottom-color: #333;
 }
 
 .settings-section:last-child {
@@ -48,7 +72,6 @@ h2 {
   padding-bottom: 0;
 }
 
-/* --- Gallery Grid --- */
 .grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -68,9 +91,17 @@ h2 {
   transition: border-color 0.2s, transform 0.1s;
 }
 
+body.dark-mode .grid-item {
+  background-color: #2d2d2d;
+}
+
 .grid-item:hover {
   border-color: #ddd;
   transform: scale(1.02);
+}
+
+body.dark-mode .grid-item:hover {
+  border-color: #555;
 }
 
 .grid-item.selected {
@@ -84,13 +115,20 @@ h2 {
   object-fit: cover;
 }
 
-/* --- Custom Slot --- */
 .custom-slot {
   border: 3px dashed #bbb;
   flex-direction: column;
 }
 
+body.dark-mode .custom-slot {
+  border-color: #555;
+}
+
 .custom-slot:hover {
+  border-color: #888;
+}
+
+body.dark-mode .custom-slot:hover {
   border-color: #888;
 }
 
@@ -129,170 +167,10 @@ h2 {
   box-sizing: border-box;
 }
 
-.custom-input-container button {
-  padding: 10px;
-  background-color: #0066cc;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.custom-input-container button:hover {
-  background-color: #0052a3;
-}
-
-/* --- Config Sections --- */
-.toggle-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 12px;
-  cursor: pointer;
-  background: #f9f9f9;
-  padding: 12px 16px;
-  border-radius: 6px;
-  border: 1px solid #eee;
-}
-
-.toggle-row:hover {
-  background: #f1f1f1;
-}
-
-.provider-list {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}body {
-  font-family: sans-serif;
-  background-color: #f0f2f5;
-  margin: 0;
-  display: flex;
-  justify-content: center;
-  padding: 40px 20px;
-  color: #333;
-}
-
-.container {
-  max-width: 900px;
-  width: 100%;
-  background: white;
-  padding: 30px;
-  border-radius: 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-h1 {
-  margin-top: 0;
-  color: #333;
-  margin-bottom: 30px;
-}
-
-h2 {
-  font-size: 18px;
-  margin: 0 0 8px 0;
-  color: #444;
-}
-
-.hint {
-  color: #666;
-  font-size: 14px;
-  margin-top: 0;
-  margin-bottom: 20px;
-}
-
-.settings-section {
-  margin-bottom: 40px;
-  padding-bottom: 30px;
-  border-bottom: 1px solid #eee;
-}
-
-.settings-section:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
-
-/* --- Gallery Grid --- */
-.grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 20px;
-}
-
-.grid-item {
-  aspect-ratio: 1;
-  border: 3px solid transparent;
-  border-radius: 8px;
-  overflow: hidden;
-  cursor: pointer;
-  background-color: #f9f9f9;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  transition: border-color 0.2s, transform 0.1s;
-}
-
-.grid-item:hover {
-  border-color: #ddd;
-  transform: scale(1.02);
-}
-
-.grid-item.selected {
-  border-color: #0066cc;
-  box-shadow: 0 0 12px rgba(0, 102, 204, 0.3);
-}
-
-.grid-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-/* --- Custom Slot --- */
-.custom-slot {
-  border: 3px dashed #bbb;
-  flex-direction: column;
-}
-
-.custom-slot:hover {
-  border-color: #888;
-}
-
-.custom-slot.selected {
-  border: 3px solid #0066cc;
-}
-
-.placeholder {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-}
-
-.plus-sign {
-  font-size: 64px;
-  color: #bbb;
-  font-weight: 300;
-}
-
-.custom-input-container {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 20px;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.custom-input-container input {
-  padding: 10px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  width: 100%;
-  box-sizing: border-box;
+body.dark-mode .custom-input-container input {
+  background-color: #2d2d2d;
+  color: #ececec;
+  border-color: #444;
 }
 
 .custom-input-container button {
@@ -309,7 +187,6 @@ h2 {
   background-color: #0052a3;
 }
 
-/* --- Config Sections --- */
 .toggle-row {
   display: flex;
   justify-content: space-between;
@@ -322,8 +199,17 @@ h2 {
   border: 1px solid #eee;
 }
 
+body.dark-mode .toggle-row {
+  background: #2d2d2d;
+  border-color: #444;
+}
+
 .toggle-row:hover {
   background: #f1f1f1;
+}
+
+body.dark-mode .toggle-row:hover {
+  background: #383838;
 }
 
 .provider-list {

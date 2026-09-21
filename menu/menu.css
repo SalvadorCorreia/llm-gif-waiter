@@ -4,6 +4,13 @@ body {
   margin: 0;
   padding: 16px;
   color: #333;
+  background-color: #fff;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+body.dark-mode {
+  background-color: #1e1e1e;
+  color: #ececec;
 }
 
 .header h2 {
@@ -21,9 +28,17 @@ body {
   align-items: center;
 }
 
+body.dark-mode .analytics-card {
+  background: #2d2d2d;
+}
+
 .analytics-card .value {
   font-weight: bold;
   color: #0066cc;
+}
+
+body.dark-mode .analytics-card .value {
+  color: #66b3ff;
 }
 
 .reset-btn {
@@ -44,6 +59,10 @@ body {
   margin-bottom: 16px;
   border-top: 1px solid #eee;
   padding-top: 12px;
+}
+
+body.dark-mode .settings-group {
+  border-top-color: #444;
 }
 
 .toggle-row {

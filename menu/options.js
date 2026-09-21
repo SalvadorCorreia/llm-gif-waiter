@@ -12,7 +12,6 @@ const curatedGifs = [
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
-  // Gallery elements
   const grid = document.getElementById("gif-grid");
   const customSlot = document.getElementById("custom-slot");
   const customPlaceholder = document.getElementById("custom-placeholder");
@@ -22,11 +21,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const customUrlInput = document.getElementById("custom-gif-url");
   const saveCustomBtn = document.getElementById("save-custom-btn");
 
-  // Configuration elements
   const providerList = document.getElementById("provider-list");
   const providerLayoutToggle = document.getElementById(
     "provider-layout-toggle",
   );
+  const darkModeToggle = document.getElementById("dark-mode-toggle");
 
   extAPI.storage.local.get(
     {
@@ -34,9 +33,9 @@ document.addEventListener("DOMContentLoaded", () => {
       customGifUrl: "",
       disabledProviders: [],
       useProviderLayouts: false,
+      darkMode: false,
     },
     (data) => {
-      // --- GIF Gallery Setup ---
       let activeUrl = data.selectedGif;
       let customUrl = data.customGifUrl;
 
@@ -65,10 +64,11 @@ document.addEventListener("DOMContentLoaded", () => {
         }
       }
 
-      // --- Layout Configuration Setup ---
       providerLayoutToggle.checked = data.useProviderLayouts;
 
-      // --- Active Providers Setup ---
+      darkModeToggle.checked = data.darkMode;
+      if (data.darkMode) document.body.classList.add("dark-mode");
+
       const manifest = extAPI.runtime.getManifest();
       const scripts = manifest.content_scripts[0].js;
       const providerScripts = scripts.filter((src) =>
@@ -90,7 +90,6 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   );
 
-  // --- Event Listeners ---
   customPlaceholder.addEventListener("click", () => {
     customPlaceholder.style.display = "none";
     customInputContainer.style.display = "flex";
@@ -124,7 +123,17 @@ document.addEventListener("DOMContentLoaded", () => {
     extAPI.storage.local.set({ useProviderLayouts: e.target.checked });
   });
 
-  // --- Helper Functions ---
+  darkModeToggle.addEventListener("change", (e) => {
+    extAPI.storage.local.set({ darkMode: e.target.checked });
+  });
+
+  extAPI.storage.onChanged.addListener((changes) => {
+    if (changes.darkMode) {
+      darkModeToggle.checked = changes.darkMode.newValue;
+      document.body.classList.toggle("dark-mode", changes.darkMode.newValue);
+    }
+  });
+
   function selectGif(url) {
     extAPI.storage.local.set({ selectedGif: url }, () => {
       document.querySelectorAll(".grid-item, .custom-slot").forEach((item) => {
