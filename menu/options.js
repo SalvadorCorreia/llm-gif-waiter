@@ -2,13 +2,13 @@ const extAPI = typeof browser !== "undefined" ? browser : chrome;
 
 const curatedGifs = [
   "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif",
-  "https://media.giphy.com/media/11ISwbgCxEzMyY/giphy.gif",
-  "https://media.giphy.com/media/uIJBFZoOaifHfqlptl/giphy.gif",
-  "https://media.giphy.com/media/3oEjI6SIIHBdRxXI40/giphy.gif",
-  "https://media.giphy.com/media/xTk9ZvMlsIlIrbZa1O/giphy.gif",
-  "https://media.giphy.com/media/L05HgB2h6qICDs5Sms/giphy.gif",
-  "https://media.giphy.com/media/VseXvvxWOA0V2/giphy.gif",
-  "https://media.giphy.com/media/jUwpNzg9IcyrK/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHA0bDRvMDJkcWM0MzRxdW1xdjZkZDhwb3dkd2JycXIwMXlhMGRrMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/sthmCnCpfr8M8jtTQy/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHA0bDRvMDJkcWM0MzRxdW1xdjZkZDhwb3dkd2JycXIwMXlhMGRrMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/7NoNw4pMNTvgc/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExeml6bGVpeWM0Zng4bnQydjBneG14c2E4aml4MGtkZnZzMmpoMXl1eiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/smzfl3E7a4iHK/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWRycnJnOGptbHp2NDYzNWw5a3E2dWFhODF0YXk4ODk3ZXlqdmhvayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/l3vRgqJIdbRp7Exfa/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExdzR4aWpwaHgyMTczMDFwbHY2ZXVtMWVib2gxb21zZzFpNDB6ZnU5OSZlcD12MV9naWZzX3NlYXJjaCZjdD1n/Z1BTGhofioRxK/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExaWRycnJnOGptbHp2NDYzNWw5a3E2dWFhODF0YXk4ODk3ZXlqdmhvayZlcD12MV9naWZzX3NlYXJjaCZjdD1n/cPZdap8PGhSvABr6xW/giphy.gif",
+  "https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExOHRpc202N2t0dHQ5b3kxZHFidWVxbWlxc3VqNGUzOXRuYnUzajQ1NCZlcD12MV9naWZzX3NlYXJjaCZjdD1n/rTnoTuupwRowE/giphy.gif",
 ];
 
 document.addEventListener("DOMContentLoaded", () => {
