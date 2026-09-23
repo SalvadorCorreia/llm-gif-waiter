@@ -217,3 +217,17 @@ body.dark-mode .toggle-row:hover {
   flex-direction: column;
   gap: 8px;
 }
+
+.interval-input {
+  width: 60px;
+  padding: 6px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  text-align: center;
+}
+
+body.dark-mode .interval-input {
+  background-color: #2d2d2d;
+  color: #ececec;
+  border-color: #444;
+}

@@ -26,7 +26,10 @@ document.addEventListener("DOMContentLoaded", () => {
     "provider-layout-toggle",
   );
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+
   const randomizeToggle = document.getElementById("randomize-toggle");
+  const intervalContainer = document.getElementById("interval-container");
+  const intervalInput = document.getElementById("randomize-interval");
 
   let activePool = [];
   let isRandomizeOn = false;
@@ -39,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       useProviderLayouts: false,
       darkMode: false,
       randomizeGifs: false,
+      randomizeInterval: 5,
     },
     (data) => {
       activePool = data.selectedGifs;
@@ -46,6 +50,8 @@ document.addEventListener("DOMContentLoaded", () => {
       let customUrl = data.customGifUrl;
 
       randomizeToggle.checked = isRandomizeOn;
+      intervalInput.value = data.randomizeInterval;
+      intervalContainer.style.display = isRandomizeOn ? "flex" : "none";
 
       curatedGifs.forEach((url) => {
         const div = document.createElement("div");
@@ -132,8 +138,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   randomizeToggle.addEventListener("change", (e) => {
     isRandomizeOn = e.target.checked;
+    intervalContainer.style.display = isRandomizeOn ? "flex" : "none";
 
-    // If turning off, truncate pool to the first selected item
     if (!isRandomizeOn && activePool.length > 1) {
       activePool = [activePool[0]];
     }
@@ -145,6 +151,13 @@ document.addEventListener("DOMContentLoaded", () => {
       },
       updateGridUI,
     );
+  });
+
+  intervalInput.addEventListener("change", (e) => {
+    let val = parseInt(e.target.value, 10);
+    if (isNaN(val) || val < 1) val = 1;
+    e.target.value = val;
+    extAPI.storage.local.set({ randomizeInterval: val });
   });
 
   customPlaceholder.addEventListener("click", () => {
@@ -164,7 +177,6 @@ document.addEventListener("DOMContentLoaded", () => {
         customSlot.style.backgroundPosition = "center";
       });
     } else {
-      // Handle clearing the custom URL
       extAPI.storage.local.set({ customGifUrl: "" }, () => {
         customSlot.style.backgroundImage = "none";
         customPlaceholder.style.display = "flex";

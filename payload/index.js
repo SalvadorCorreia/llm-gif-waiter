@@ -1,10 +1,12 @@
 window.LLMPayload = {
   container: null,
+  configKey: "llm-nyan-config",
   wrapper: null,
   boundResize: null,
   boundStopResize: null,
   boundMouseMove: null,
   boundMouseUp: null,
+  cycleIntervalId: null,
 
   mount: function (targetElement, theme) {
     this.container = targetElement;
@@ -14,6 +16,7 @@ window.LLMPayload = {
       {
         selectedGifs: ["https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif"],
         randomizeGifs: false,
+        randomizeInterval: 5,
         useProviderLayouts: false,
         globalLayout: {},
         providerLayouts: {},
@@ -37,6 +40,13 @@ window.LLMPayload = {
         img.src = activeUrl;
         img.alt = "Loading GIF";
         img.draggable = false;
+
+        if (data.randomizeGifs && pool.length > 1) {
+          const ms = Math.max(1, data.randomizeInterval) * 1000;
+          this.cycleIntervalId = setInterval(() => {
+            if (img) img.src = pool[Math.floor(Math.random() * pool.length)];
+          }, ms);
+        }
 
         const providerName = window.LLMRegistry
           ? window.LLMRegistry.getActiveProvider().name
@@ -183,6 +193,11 @@ window.LLMPayload = {
   },
 
   unmount: function () {
+    if (this.cycleIntervalId) {
+      clearInterval(this.cycleIntervalId);
+      this.cycleIntervalId = null;
+    }
+
     if (this.boundResize)
       document.removeEventListener("mousemove", this.boundResize);
     if (this.boundStopResize)

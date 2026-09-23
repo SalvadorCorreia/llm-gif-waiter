@@ -11,13 +11,20 @@
 
     <div class="settings-section">
       <h2>GIF Gallery</h2>
-      <label class="toggle-row" style="margin-bottom: 12px; max-width: 400px;">
+      <label class="toggle-row" style="margin-bottom: 2px;">
         <span>Randomize Active GIFs</span>
         <input type="checkbox" id="randomize-toggle">
+      </label>
+      <label class="toggle-row" id="interval-container" style="display: none; padding-top: 4px; padding-bottom: 12px; border-top: none;">
+        <span style="font-size: 14px; opacity: 0.8;">Cycle Interval (seconds)</span>
+        <input type="number" id="randomize-interval" min="1" max="120" value="5" class="interval-input">
       </label>
       <p class="hint">When enabled, click multiple GIFs to create a rotation pool.</p>
       
       <div class="grid" id="gif-grid">
+        <!-- Default GIFs injected here via JS -->
+        
+        <!-- Custom Input Slot -->
         <div class="grid-item custom-slot" id="custom-slot">
           <div class="placeholder" id="custom-placeholder">
             <span class="plus-sign">+</span>
