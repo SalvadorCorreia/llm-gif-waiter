@@ -26,29 +26,36 @@ document.addEventListener("DOMContentLoaded", () => {
     "provider-layout-toggle",
   );
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const randomizeToggle = document.getElementById("randomize-toggle");
+
+  let activePool = [];
+  let isRandomizeOn = false;
 
   extAPI.storage.local.get(
     {
-      selectedGif: curatedGifs[0],
+      selectedGifs: [curatedGifs[0]],
       customGifUrl: "",
       disabledProviders: [],
       useProviderLayouts: false,
       darkMode: false,
+      randomizeGifs: false,
     },
     (data) => {
-      let activeUrl = data.selectedGif;
+      activePool = data.selectedGifs;
+      isRandomizeOn = data.randomizeGifs;
       let customUrl = data.customGifUrl;
+
+      randomizeToggle.checked = isRandomizeOn;
 
       curatedGifs.forEach((url) => {
         const div = document.createElement("div");
         div.className = "grid-item";
-        if (activeUrl === url) div.classList.add("selected");
 
         const img = document.createElement("img");
         img.src = url;
         div.appendChild(img);
 
-        div.addEventListener("click", () => selectGif(url));
+        div.addEventListener("click", () => handleGifClick(url));
         grid.insertBefore(div, customSlot);
       });
 
@@ -59,13 +66,11 @@ document.addEventListener("DOMContentLoaded", () => {
         customSlot.style.backgroundSize = "cover";
         customSlot.style.backgroundPosition = "center";
         customPlaceholder.style.display = "none";
-        if (activeUrl === customUrl) {
-          customSlot.classList.add("selected");
-        }
       }
 
-      providerLayoutToggle.checked = data.useProviderLayouts;
+      updateGridUI();
 
+      providerLayoutToggle.checked = data.useProviderLayouts;
       darkModeToggle.checked = data.darkMode;
       if (data.darkMode) document.body.classList.add("dark-mode");
 
@@ -90,6 +95,58 @@ document.addEventListener("DOMContentLoaded", () => {
     },
   );
 
+  function handleGifClick(url) {
+    if (!url) return;
+
+    if (isRandomizeOn) {
+      if (activePool.includes(url)) {
+        if (activePool.length > 1) {
+          activePool = activePool.filter((g) => g !== url);
+        }
+      } else {
+        activePool.push(url);
+      }
+    } else {
+      activePool = [url];
+    }
+
+    extAPI.storage.local.set({ selectedGifs: activePool }, updateGridUI);
+  }
+
+  function updateGridUI() {
+    document.querySelectorAll(".grid-item, .custom-slot").forEach((item) => {
+      item.classList.remove("selected");
+    });
+
+    document.querySelectorAll(".grid-item img").forEach((img) => {
+      if (activePool.includes(img.src)) {
+        img.parentElement.classList.add("selected");
+      }
+    });
+
+    const currentCustom = customUrlInput.value.trim();
+    if (currentCustom && activePool.includes(currentCustom)) {
+      customSlot.classList.add("selected");
+    }
+  }
+
+  randomizeToggle.addEventListener("change", (e) => {
+    isRandomizeOn = e.target.checked;
+
+    // If turning off, truncate pool to the first selected item
+    if (!isRandomizeOn && activePool.length > 1) {
+      activePool = [activePool[0]];
+    }
+
+    extAPI.storage.local.set(
+      {
+        randomizeGifs: isRandomizeOn,
+        selectedGifs: activePool,
+      },
+      updateGridUI,
+    );
+  });
+
   customPlaceholder.addEventListener("click", () => {
     customPlaceholder.style.display = "none";
     customInputContainer.style.display = "flex";
@@ -100,11 +157,23 @@ document.addEventListener("DOMContentLoaded", () => {
     const val = customUrlInput.value.trim();
     if (val) {
       extAPI.storage.local.set({ customGifUrl: val }, () => {
-        selectGif(val);
+        handleGifClick(val);
         customInputContainer.style.display = "none";
         customSlot.style.backgroundImage = `url(${val})`;
         customSlot.style.backgroundSize = "cover";
         customSlot.style.backgroundPosition = "center";
+      });
+    } else {
+      // Handle clearing the custom URL
+      extAPI.storage.local.set({ customGifUrl: "" }, () => {
+        customSlot.style.backgroundImage = "none";
+        customPlaceholder.style.display = "flex";
+        customInputContainer.style.display = "none";
+        if (activePool.includes(val)) {
+          activePool = activePool.filter((g) => g !== val);
+          if (activePool.length === 0) activePool = [curatedGifs[0]];
+          extAPI.storage.local.set({ selectedGifs: activePool }, updateGridUI);
+        }
       });
     }
   });
@@ -115,7 +184,7 @@ document.addEventListener("DOMContentLoaded", () => {
       customInputContainer.style.display === "none"
     ) {
       const val = customUrlInput.value.trim();
-      if (val) selectGif(val);
+      if (val) handleGifClick(val);
     }
   });
 
@@ -133,26 +202,6 @@ document.addEventListener("DOMContentLoaded", () => {
       document.body.classList.toggle("dark-mode", changes.darkMode.newValue);
     }
   });
-
-  function selectGif(url) {
-    extAPI.storage.local.set({ selectedGif: url }, () => {
-      document.querySelectorAll(".grid-item, .custom-slot").forEach((item) => {
-        item.classList.remove("selected");
-      });
-
-      let found = false;
-      document.querySelectorAll(".grid-item img").forEach((img) => {
-        if (img.src === url) {
-          img.parentElement.classList.add("selected");
-          found = true;
-        }
-      });
-
-      if (!found && customUrlInput.value === url) {
-        customSlot.classList.add("selected");
-      }
-    });
-  }
 
   function renderProviders(disabledProviders) {
     if (window.LLMRegistry && window.LLMRegistry.providers) {

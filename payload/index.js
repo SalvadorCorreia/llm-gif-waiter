@@ -12,7 +12,8 @@ window.LLMPayload = {
 
     extAPI.storage.local.get(
       {
-        selectedGif: "https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif",
+        selectedGifs: ["https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif"],
+        randomizeGifs: false,
         useProviderLayouts: false,
         globalLayout: {},
         providerLayouts: {},
@@ -23,8 +24,17 @@ window.LLMPayload = {
         this.wrapper = document.createElement("div");
         this.wrapper.className = "llm-nyan-widget";
 
+        let pool = data.selectedGifs;
+        if (!pool || pool.length === 0) {
+          pool = ["https://media.giphy.com/media/sIIhZliB2McAo/giphy.gif"];
+        }
+
+        const activeUrl = data.randomizeGifs
+          ? pool[Math.floor(Math.random() * pool.length)]
+          : pool[0];
+
         const img = document.createElement("img");
-        img.src = data.selectedGif;
+        img.src = activeUrl;
         img.alt = "Loading GIF";
         img.draggable = false;
 
