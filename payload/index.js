@@ -18,6 +18,7 @@ window.LLMPayload = {
         randomizeGifs: false,
         randomizeInterval: 5,
         useProviderLayouts: false,
+        lockGifSize: true,
         globalLayout: {},
         providerLayouts: {},
       },
@@ -61,6 +62,13 @@ window.LLMPayload = {
 
         img.style.width = savedConfig.width || "300px";
 
+        if (data.lockGifSize) {
+          img.style.height = savedConfig.height || "300px";
+          img.style.objectFit = "contain";
+        } else {
+          img.style.height = "auto";
+        }
+
         if (savedConfig.left && savedConfig.top) {
           this.wrapper.style.left = savedConfig.left;
           this.wrapper.style.top = savedConfig.top;
@@ -71,7 +79,7 @@ window.LLMPayload = {
         this.container.appendChild(this.wrapper);
 
         this.makeDraggable(this.wrapper);
-        this.addResizeHandles(this.wrapper, img);
+        this.addResizeHandles(this.wrapper, img, data.lockGifSize);
       },
     );
   },
@@ -80,6 +88,7 @@ window.LLMPayload = {
     const extAPI = typeof browser !== "undefined" ? browser : chrome;
     const config = {
       width: img.style.width,
+      height: img.style.height,
       left: wrapper.style.left,
       top: wrapper.style.top,
     };
@@ -101,7 +110,7 @@ window.LLMPayload = {
     );
   },
 
-  addResizeHandles: function (wrapper, img) {
+  addResizeHandles: function (wrapper, img, isLocked) {
     const positions = ["nw", "ne", "sw", "se"];
     const self = this;
 
@@ -140,7 +149,14 @@ window.LLMPayload = {
           newWidth = Math.max(100, newWidth);
           const actualDeltaX = newWidth - startWidth;
           const actualDeltaY = actualDeltaX * aspectRatio;
+
           img.style.width = newWidth + "px";
+
+          if (isLocked) {
+            img.style.height = startHeight + actualDeltaY + "px";
+          } else {
+            img.style.height = "auto";
+          }
 
           if (pos.includes("w")) {
             wrapper.style.left = startLeft - actualDeltaX + "px";

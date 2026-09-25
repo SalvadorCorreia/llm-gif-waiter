@@ -26,6 +26,7 @@ document.addEventListener("DOMContentLoaded", () => {
     "provider-layout-toggle",
   );
   const darkModeToggle = document.getElementById("dark-mode-toggle");
+  const lockSizeToggle = document.getElementById("lock-size-toggle");
 
   const randomizeToggle = document.getElementById("randomize-toggle");
   const intervalContainer = document.getElementById("interval-container");
@@ -41,6 +42,7 @@ document.addEventListener("DOMContentLoaded", () => {
       disabledProviders: [],
       useProviderLayouts: false,
       darkMode: false,
+      lockGifSize: true,
       randomizeGifs: false,
       randomizeInterval: 5,
     },
@@ -77,6 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
       updateGridUI();
 
       providerLayoutToggle.checked = data.useProviderLayouts;
+      lockSizeToggle.checked = data.lockGifSize;
       darkModeToggle.checked = data.darkMode;
       if (data.darkMode) document.body.classList.add("dark-mode");
 
@@ -202,6 +205,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   providerLayoutToggle.addEventListener("change", (e) => {
     extAPI.storage.local.set({ useProviderLayouts: e.target.checked });
+  });
+
+  lockSizeToggle.addEventListener("change", (e) => {
+    extAPI.storage.local.set({ lockGifSize: e.target.checked });
   });
 
   darkModeToggle.addEventListener("change", (e) => {
